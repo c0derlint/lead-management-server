@@ -36,6 +36,8 @@ $ npm install
 $ npm start
 ```
 
+You will need to make changes to the config/default.json to add database details. A lms_DB_PASSWORD environment variable will also have to be created in order to store database password.
+
 ## Contributing
 
 **1.** Make reasonable changes.

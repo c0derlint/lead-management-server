@@ -1,0 +1,9 @@
+{
+  "name": "Lead Management Server",
+  "db": {
+    "host": "",
+    "port": "",
+    "collection": "",
+    "username": ""
+  }
+}
