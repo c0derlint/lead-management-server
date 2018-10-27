@@ -1,17 +1,19 @@
 const User = require("../models/users");
-function createUser(username, phone, occupation, existing, remarks) {
+
+function createUser(userDetails) {
   return new Promise((resolve, reject) => {
     const customer = new User({
-      username: username,
-      phone: phone,
-      occupation: occupation,
-      existing: existing,
-      remarks: remarks
+      username: userDetails.username,
+      phone: userDetails.phone,
+      occupation: userDetails.occupation,
+      existing: userDetails.existing,
+      remarks: userDetails.remarks
     });
     customer.save()
-      .then(() => resolve({
+      .then(createdUser => resolve({
         status: 201,
-        message: 'User added'
+        message: 'User added',
+        user: createdUser
       }))
       .catch(err => {
         if(err.code == 11000){
@@ -29,4 +31,30 @@ function createUser(username, phone, occupation, existing, remarks) {
   });
 }
 
-module.exports.createUser = createUser;
+function getUser(userDetails) {
+  const { limit } = userDetails;
+  delete userDetails.limit;
+
+  return new Promise((resolve, reject) => {
+    User.find(userDetails)
+      .limit(limit)
+      .then(users => {
+        if(users.length)
+          resolve(users)
+        else
+          reject({
+            status: 404,
+            message: "User not found"
+          })
+      })
+      .catch(error => reject({
+        status: 500,
+        message: "Internal Server Error"
+      }))
+  });
+}
+
+module.exports = {
+  createUser: createUser,
+  getUser: getUser
+}
